@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from './useAuthContext';
-import { auth } from '../firebase/config';
+import { auth, storage } from '../firebase/config';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 
 // this hook is used to sign up in firebase
 export const useSignup = () => {
@@ -17,15 +18,22 @@ export const useSignup = () => {
     }
   };
 
-  const signup = async (email, password, displayName) => {
+  const signUp = async (email, password, displayName, thumbnail) => {
     setIsPending(true);
 
     try {
       // signup
       const res = await createUserWithEmailAndPassword(auth, email, password);
 
-      // add display name to user
-      await updateProfile(res.user, { displayName });
+      // upload user thumbnail to firebase storage
+      const uploadPath = `thumbnails/${res.user.uid}/${thumbnail.name}`;
+      const storageRef = ref(storage, uploadPath);
+      const uploadTask = uploadBytesResumable(storageRef, thumbnail);
+      const img = await uploadTask.then();
+      const imgUrl = await getDownloadURL(img.ref);
+
+      // add display name and thumbnail to user
+      await updateProfile(res.user, { displayName, photoURL: imgUrl });
 
       // dispatch login action
       dispatchIfNotUnmounted({ type: 'LOGIN', payload: res.user });
@@ -36,6 +44,7 @@ export const useSignup = () => {
       }
     } catch (err) {
       if (!isUnmounted) {
+        console.log(err);
         setError(err.message);
         setIsPending(false);
       }
@@ -46,5 +55,5 @@ export const useSignup = () => {
     return () => setIsUnmounted(true);
   }, []);
 
-  return { signup, isPending, error };
+  return { signUp, isPending, error };
 };
