@@ -1,0 +1,39 @@
+.navbar {
+  width: calc(100% - 420px); /* 420 = sidebar width (300) + main container padding (60 + 60) */
+  margin-bottom: 160px;
+}
+
+.navbar-content {
+  padding-top: 30px;
+  padding-bottom: 60px;
+  background-color: var(--bg-color);
+  position: fixed;
+  width: inherit;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo {
+  font-weight: bold;
+  color: var(--heading-color);
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.navbar .logo img {
+  margin-right: 10px;
+  filter: invert(25%);
+  width: 36px;
+  vertical-align: sub;
+}
+
+.navbar a {
+  color: var(--heading-color);
+  text-decoration: none;
+  margin-right: 20px;
+}

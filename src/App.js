@@ -12,6 +12,8 @@ import { Login } from './pages/login/Login';
 import { Signup } from './pages/signup/Signup';
 import { NewProject } from './pages/new-project/NewProject';
 import { ProjectDetails } from './pages/project-details/ProjectDetails';
+import { Navbar } from './components/Navbar/Navbar';
+import { Sidebar } from './components/Sidebar/Sidebar';
 
 export const App = () => {
   const { isAuthReady } = useAuthContext();
@@ -19,9 +21,11 @@ export const App = () => {
     isAuthReady && (
       <div className="App">
         <BrowserRouter>
+          <Sidebar />
           <div className="container">
+            <Navbar />
             <Routes>
-              <Route exact path="/" element={<Dashboard />}></Route>
+              <Route exact="true" path="/" element={<Dashboard />}></Route>
               <Route path="/login" element={<Login />}></Route>
               <Route path="/signup" element={<Signup />}></Route>
               <Route path="/new-project" element={<NewProject />}></Route>
