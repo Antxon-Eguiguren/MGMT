@@ -6,6 +6,7 @@ import { collection, onSnapshot, query, where, orderBy } from 'firebase/firestor
 export const useCollection = (_collection, _query, _orderBy) => {
   const [documents, setDocuments] = useState(null);
   const [error, setError] = useState(null);
+  const [isPending, setIsPending] = useState(false);
 
   // if we don't use a ref --> infinite loop in useEffect
   // _query and _orderBy are arrays and is "different" on every function call
@@ -14,6 +15,7 @@ export const useCollection = (_collection, _query, _orderBy) => {
   const ob = useRef(_orderBy).current;
 
   useEffect(() => {
+    setIsPending(true);
     let ref = collection(db, _collection);
 
     if (q) {
@@ -31,13 +33,14 @@ export const useCollection = (_collection, _query, _orderBy) => {
         snapshot.docs.forEach((doc) => {
           results.push({ ...doc.data(), id: doc.id });
         });
-
         setDocuments(results);
         setError(null);
+        setIsPending(false);
       },
-      (error) => {
-        console.log(error);
-        setError('Could not fetch the data...');
+      (err) => {
+        console.log(err);
+        setError(err.message);
+        setIsPending(false);
       }
     );
 
@@ -45,5 +48,5 @@ export const useCollection = (_collection, _query, _orderBy) => {
     return () => unsubscribe();
   }, [_collection, q, ob]);
 
-  return { documents, error };
+  return { documents, error, isPending };
 };

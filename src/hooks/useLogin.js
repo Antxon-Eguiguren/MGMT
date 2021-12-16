@@ -18,7 +18,6 @@ export const useLogin = () => {
   };
 
   const login = async (email, password) => {
-    setError(null);
     setIsPending(true);
 
     try {

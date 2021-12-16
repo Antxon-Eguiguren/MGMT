@@ -38,7 +38,7 @@ export const useFirestore = (c) => {
 
   // create a document
   const createDocument = async (doc) => {
-    dispatch({ type: 'IS_PENDING' });
+    dispatchIfNotUnmounted({ type: 'IS_PENDING' });
 
     try {
       const createdAt = serverTimestamp();
@@ -51,13 +51,13 @@ export const useFirestore = (c) => {
 
   // delete a document
   const deleteDocument = async (id) => {
-    dispatch({ type: 'IS_PENDING' });
+    dispatchIfNotUnmounted({ type: 'IS_PENDING' });
 
     try {
       await deleteDoc(doc(db, c, id));
       dispatchIfNotUnmounted({ type: 'DOCUMENT_DELETED' });
     } catch (err) {
-      dispatchIfNotUnmounted({ type: 'ERROR', payload: 'Could not delete the document...' });
+      dispatchIfNotUnmounted({ type: 'ERROR', payload: err.message });
     }
   };
 

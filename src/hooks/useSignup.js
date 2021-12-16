@@ -18,16 +18,11 @@ export const useSignup = () => {
   };
 
   const signup = async (email, password, displayName) => {
-    setError(null);
     setIsPending(true);
 
     try {
       // signup
       const res = await createUserWithEmailAndPassword(auth, email, password);
-
-      if (!res) {
-        throw new Error('Could not complete the signup...');
-      }
 
       // add display name to user
       await updateProfile(res.user, { displayName });
@@ -36,8 +31,8 @@ export const useSignup = () => {
       dispatchIfNotUnmounted({ type: 'LOGIN', payload: res.user });
 
       if (!isUnmounted) {
-        setIsPending(false);
         setError(null);
+        setIsPending(false);
       }
     } catch (err) {
       if (!isUnmounted) {
@@ -51,5 +46,5 @@ export const useSignup = () => {
     return () => setIsUnmounted(true);
   }, []);
 
-  return { signup, error, isPending };
+  return { signup, isPending, error };
 };

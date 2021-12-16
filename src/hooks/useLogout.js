@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthContext } from './useAuthContext';
 import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
@@ -18,7 +18,6 @@ export const useLogout = () => {
   };
 
   const logout = async () => {
-    setError(null);
     setIsPending(true);
 
     try {
@@ -30,8 +29,8 @@ export const useLogout = () => {
 
       // update state
       if (!isUnmounted) {
-        setIsPending(false);
         setError(null);
+        setIsPending(false);
       }
     } catch (err) {
       if (!isUnmounted) {
