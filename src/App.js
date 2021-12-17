@@ -14,6 +14,7 @@ import { NewProject } from './pages/new-project/NewProject';
 import { ProjectDetails } from './pages/project-details/ProjectDetails';
 import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
+import { OnlineUsers } from './components/OnlineUsers/OnlineUsers';
 
 export const App = () => {
   const { user, isAuthReady } = useAuthContext();
@@ -33,6 +34,7 @@ export const App = () => {
               <Route path="*" element={user ? <Dashboard /> : <Navigate to="/login" />}></Route>
             </Routes>
           </div>
+          {user && <OnlineUsers />}
         </BrowserRouter>
       )}
     </div>

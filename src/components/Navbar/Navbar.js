@@ -10,7 +10,7 @@ export const Navbar = () => {
   const { user } = useAuthContext();
 
   return (
-    <div className="navbar">
+    <div className={user ? 'navbar' : 'navbar-100'}>
       <div className="navbar-content">
         <ul>
           <li className="logo">

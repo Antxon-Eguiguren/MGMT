@@ -1,5 +1,10 @@
 .navbar {
-  width: calc(100% - 420px); /* 420 = sidebar width (300) + main container padding (60 + 60) */
+  width: calc(100% - 620px); /* 420 = sidebar width (300) + main container padding (60 + 60) + online users width (200) */
+  margin-bottom: 160px;
+}
+
+.navbar-100 {
+  width: 100%; /* for navbar in login and signup pages */
   margin-bottom: 160px;
 }
 
@@ -11,12 +16,15 @@
   width: inherit;
 }
 
-.navbar ul {
+.navbar ul,
+.navbar-100 ul {
   display: flex;
   align-items: center;
+  padding-right: 60px;
 }
 
-.navbar .logo {
+.navbar .logo,
+.navbar-100 .logo {
   font-weight: bold;
   color: var(--heading-color);
   letter-spacing: 1px;
@@ -25,14 +33,16 @@
   margin-right: auto;
 }
 
-.navbar .logo img {
+.navbar .logo img,
+.navbar-100 .logo img {
   margin-right: 10px;
   filter: invert(25%);
   width: 36px;
   vertical-align: sub;
 }
 
-.navbar a {
+.navbar a,
+.navbar-100 a {
   color: var(--heading-color);
   text-decoration: none;
   margin-right: 20px;
