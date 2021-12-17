@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 // styles
 import './App.css';
@@ -16,24 +16,25 @@ import { Navbar } from './components/Navbar/Navbar';
 import { Sidebar } from './components/Sidebar/Sidebar';
 
 export const App = () => {
-  const { isAuthReady } = useAuthContext();
+  const { user, isAuthReady } = useAuthContext();
   return (
-    isAuthReady && (
-      <div className="App">
+    <div className="App">
+      {isAuthReady && (
         <BrowserRouter>
-          <Sidebar />
+          {user && <Sidebar />}
           <div className="container">
             <Navbar />
             <Routes>
-              <Route exact="true" path="/" element={<Dashboard />}></Route>
-              <Route path="/login" element={<Login />}></Route>
-              <Route path="/signup" element={<Signup />}></Route>
-              <Route path="/new-project" element={<NewProject />}></Route>
-              <Route path="/projects/:id" element={<ProjectDetails />}></Route>
+              <Route exact="true" path="/" element={user ? <Dashboard /> : <Navigate to="/login" />}></Route>
+              <Route path="/login" element={user ? <Navigate to="/" /> : <Login />}></Route>
+              <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />}></Route>
+              <Route path="/new-project" element={user ? <NewProject /> : <Navigate to="/login" />}></Route>
+              <Route path="/projects/:id" element={user ? <ProjectDetails /> : <Navigate to="/login" />}></Route>
+              <Route path="*" element={user ? <Dashboard /> : <Navigate to="/login" />}></Route>
             </Routes>
           </div>
         </BrowserRouter>
-      </div>
-    )
+      )}
+    </div>
   );
 };
