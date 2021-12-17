@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from './useAuthContext';
-import { auth, storage } from '../firebase/config';
+import { auth, storage, db } from '../firebase/config';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { setDoc, doc } from 'firebase/firestore';
 
 // this hook is used to sign up in firebase
 export const useSignup = () => {
@@ -34,6 +35,13 @@ export const useSignup = () => {
 
       // add display name and thumbnail to user
       await updateProfile(res.user, { displayName, photoURL: imgUrl });
+
+      // create user document in firestore
+      await setDoc(doc(db, `users/${res.user.uid}`), {
+        isOnline: true,
+        photoURL: imgUrl,
+        displayName,
+      });
 
       // dispatch login action
       dispatchIfNotUnmounted({ type: 'LOGIN', payload: res.user });

@@ -56,11 +56,7 @@ export const Signup = () => {
         {thumbnailError && <div className="error">{thumbnailError}</div>}
       </label>
       {!isPending && <button className="btn">Sign Up</button>}
-      {isPending && (
-        <button className="btn" disabled>
-          Loading
-        </button>
-      )}
+      {isPending && <p>Loading...</p>}
       {error && <div className="error">{error}</div>}
     </form>
   );

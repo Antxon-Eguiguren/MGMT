@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuthContext } from './useAuthContext';
-import { auth } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, updateDoc } from 'firebase/firestore';
 
 // this hook is used to login in firebase
 export const useLogin = () => {
@@ -23,6 +24,11 @@ export const useLogin = () => {
     try {
       // login
       const res = await signInWithEmailAndPassword(auth, email, password);
+
+      // update isOnline status in firestore after logging in...
+      await updateDoc(doc(db, `users/${res.user.uid}`), {
+        isOnline: true,
+      });
 
       // dispatch login action
       dispatchIfNotUnmounted({ type: 'LOGIN', payload: res.user });

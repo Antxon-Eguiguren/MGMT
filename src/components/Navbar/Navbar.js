@@ -2,10 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Logo from '../../assets/temple.svg';
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useLogout } from '../../hooks/useLogout';
 
 export const Navbar = () => {
-  const { dispatch } = useAuthContext();
+  const { logout, isPending } = useLogout();
+
   return (
     <div className="navbar">
       <div className="navbar-content">
@@ -23,9 +24,12 @@ export const Navbar = () => {
             <Link to="/signup">Signup</Link>
           </li>
           <li>
-            <button className="btn" onClick={() => dispatch({ type: 'LOGOUT' })}>
-              Logout
-            </button>
+            {!isPending && (
+              <button className="btn" onClick={logout}>
+                Logout
+              </button>
+            )}
+            {isPending && <p>Logging out...</p>}
           </li>
         </ul>
       </div>
