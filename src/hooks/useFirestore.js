@@ -1,6 +1,6 @@
 import { useReducer, useEffect, useState } from 'react';
 import { db } from '../firebase/config';
-import { collection, serverTimestamp, addDoc, deleteDoc, doc } from 'firebase/firestore';
+import { collection, serverTimestamp, addDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 
 let initialState = {
   document: null,
@@ -17,6 +17,8 @@ const firestoreReducer = (state, action) => {
       return { isPending: false, document: action.payload, success: true, error: null };
     case 'DOCUMENT_DELETED':
       return { isPending: false, document: null, success: true, error: null };
+    case 'DOCUMENT_UPDATED':
+      return { isPending: false, document: action.payload, success: true, error: null };
     case 'ERROR':
       return { isPending: false, document: null, success: false, error: action.payload };
     default:
@@ -61,9 +63,21 @@ export const useFirestore = (c) => {
     }
   };
 
+  // update a dcoument
+  const updateDocument = async (id, updates) => {
+    dispatchIfNotUnmounted({ type: 'IS_PENDING' });
+
+    try {
+      const updatedDocument = await updateDoc(doc(db, c, id), updates);
+      dispatchIfNotUnmounted({ type: 'DOCUMENT_UPDATED', payload: updatedDocument });
+    } catch (err) {
+      dispatchIfNotUnmounted({ type: 'ERROR', payload: err.message });
+    }
+  };
+
   useEffect(() => {
     return () => setIsUnmounted(true);
   }, []);
 
-  return { createDocument, deleteDocument, response };
+  return { createDocument, deleteDocument, updateDocument, response };
 };

@@ -13,8 +13,12 @@ export const useDocument = (c, id) => {
     const unsubscribe = onSnapshot(
       ref,
       (snapshot) => {
-        setDocument({ ...snapshot.data(), id: snapshot.id });
-        setError(null);
+        if (snapshot.data()) {
+          setDocument({ ...snapshot.data(), id: snapshot.id });
+          setError(null);
+        } else {
+          setError('No such document with that id...');
+        }
         setIsPending(false);
       },
       (err) => {

@@ -1,0 +1,13 @@
+.project-comments {
+  margin-bottom: 100px;
+}
+
+.project-comments label {
+  margin-top: 30px;
+  margin-bottom: 0px;
+}
+
+.project-comments textarea {
+  min-height: 40px;
+  font-size: 1.5em;
+}
